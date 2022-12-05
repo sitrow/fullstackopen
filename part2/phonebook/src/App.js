@@ -48,7 +48,7 @@ const App = () => {
     const personObject = {
       name: newName,
       number: newNumber,
-      id: persons.length + 1
+      id: names.length + 1      
     }
 
     if (names.includes(newName)){
@@ -75,35 +75,30 @@ const App = () => {
           }, 3000)
         })
       }
-    } 
-
-    personSevices
+    } else {
+      personSevices
       .create(personObject)
       .then(response => {
         setPersons(persons.concat(personObject))
         setNewName('')
         setNewNumber('')
       })
+      .then(()=>hook())
       .then(() => {
         setNotifyMessage(`${personObject.name} added`)
         setTimeout(() => {
           setNotifyMessage(null)
         }, 3000)
       })
-      .catch(error => {
-        setErrorMessage(`Couldn't add ${personObject.name}`)
+      .catch(err => {
+        //console.log(err.response.data.error)
+
+        setErrorMessage(err.response.data.error)
         setTimeout( () => {
           setErrorMessage(null)
         }, 3000)
       })
-
-    /*axios
-      .post('http://localhost:3001/persons', personObject)
-      .then(response => {
-        setPersons(persons.concat(personObject))
-        setNewName('')
-        setNewNumber('')
-      })*/  
+    }  
   }
 
   const removePerson = (event) => {
